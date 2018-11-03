@@ -10,4 +10,4 @@ app = ClarifaiApp(api_key='bdd2a71595674c4f995647b96b7509b5')
 
 model = app.public_models.general_model
 model.model_version = 'aa7f35c01e0642fda5cf400f543e7c40'
-response = model.predict(Image(url="https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-2.jpg"))
+response = model.predict([ClImage(url="https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-2.jpg")])

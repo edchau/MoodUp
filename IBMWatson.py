@@ -59,6 +59,12 @@ def split_rows(response):
                       'tone_id': 'neutral',
                        'score': 1}
 
+def get_document_tones(response):
+    """
+    Returns list of tones in overall document
+    """
+    return [tone['tone_id'] for tone in response['document_tone']['tones']]
+
 def response_to_df(response):
     return pd.DataFrame(split_rows(response))[['sentence_id', 'tone_id', 'score']]
 
@@ -80,7 +86,7 @@ def plot_distribution_of_scores(df):
             )
             fig = go.Figure(data=data, layout=layout)
             iplot(fig)
-            
+
 def plot_proportion_of_sentences_with_emotion(df):
     x=['joy', 'confident', 'analytical', 'neutral', 'tentative', 'sadness', 'anger']
     data = [go.Bar(

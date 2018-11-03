@@ -19,31 +19,43 @@ def get_tone(text):
         'application/json'
     ).get_result()
     return tone_analysis
-
-def get_tones_and_scores(response):
-    d = dict(anger=0, fear=0, joy=0, sadness=0, analytical=0, confident=0, tentative=0)
-    for sentence in response['sentences_tone']:
-        tones = sentence['tones']
-        for tone in tones:
-            d[tone['tone_id']] += tone['score']
-    return d
-
-def get_emotion(dictionary):
-    return max(dictionary.items(), key=lambda x: x[1])
-
-def get_current_mood(text): #GET INFO
-    return get_emotion(get_tones_and_scores(get_tone(text)))
+#
+# def get_tones_and_scores(response):
+#     d = dict(anger=0, fear=0, joy=0, sadness=0, analytical=0, confident=0, tentative=0)
+#     for sentence in response['document_tone']:
+#         tones = sentence['tones']
+#         for tone in tones:
+#             d[tone['tone_id']] += tone['score']
+#     return d
+#
+# def get_emotion(dictionary):
+#     return max(dictionary.items(), key=lambda x: x[1])
+#
+# def get_current_mood(text): #GET INFO
+#     return get_emotion(get_tones_and_scores(get_tone(text)))
 
 def split_rows(response):
-    for sentence in response['sentences_tone']:
-        tones = sentence['tones']
+    if 'sentences_tone' in response:
+        for sentence in response['sentences_tone']:
+            tones = sentence['tones']
+            if tones:
+                for tone in tones:
+                    yield {'sentence_id': sentence['sentence_id'],
+                          'tone_id': tone['tone_id'],
+                           'score': tone['score']}
+            else:
+                yield {'sentence_id': sentence['sentence_id'],
+                          'tone_id': 'neutral',
+                           'score': 1}
+    else:
+        tones = response['document_tone']['tones']
         if tones:
             for tone in tones:
-                yield {'sentence_id': sentence['sentence_id'],
+                yield {'sentence_id': 0,
                       'tone_id': tone['tone_id'],
                        'score': tone['score']}
         else:
-            yield {'sentence_id': sentence['sentence_id'],
+            yield {'sentence_id': 0,
                       'tone_id': 'neutral',
                        'score': 1}
 
@@ -68,6 +80,7 @@ def plot_distribution_of_scores(df):
             )
             fig = go.Figure(data=data, layout=layout)
             iplot(fig)
+            
 def plot_proportion_of_sentences_with_emotion(df):
     x=['joy', 'confident', 'analytical', 'neutral', 'tentative', 'sadness', 'anger']
     data = [go.Bar(

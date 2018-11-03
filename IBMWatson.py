@@ -94,3 +94,4 @@ def plot_proportion_of_sentences_with_emotion(df):
     iplot(fig)
 
 if __name__ == 'main':
+    pass

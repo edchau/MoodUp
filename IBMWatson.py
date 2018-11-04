@@ -1,4 +1,5 @@
 import json
+import watson_developer_cloud
 from watson_developer_cloud import ToneAnalyzerV3
 import numpy as np
 import pandas as pd
@@ -6,6 +7,26 @@ import seaborn as sns
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objs as go
 import matplotlib.pyplot as plt
+
+# watson assistant auto response
+service = watson_developer_cloud.AssistantV1(
+    iam_apikey = '6y2WMureuqOLcCVK6vifyE0lFeq_Z2UXyeqHlr3PMWxq', # replace with API key
+    version = '2018-09-20', 
+    url = 'https://gateway-wdc.watsonplatform.net/assistant/api'
+)
+workspace_id = 'f3155ca1-68d7-48f5-874d-fb7ecb03ff80' # replace with workspace ID
+
+def auto_response(text):
+    response = service.message(
+        workspace_id = workspace_id,
+        input = {
+            'text': text
+        }
+    )
+    if response:
+        return response.result['output']['generic'][0]['text']
+
+##############
 
 tone_analyzer = ToneAnalyzerV3(
     version='2017-09-21',
@@ -111,6 +132,13 @@ def plot_proportion_of_sentences_with_emotion(df):
             )
     fig = go.Figure(data=data, layout=layout)
     iplot(fig)
+
+# def response_to_mood(moods_array):
+#     for mood in moods_array:
+#         if mood = 'anger':
+#             return "Hey, calm down. "
+#         if mood = 'fear':
+#             return ""
 
 if __name__ == 'main':
     pass

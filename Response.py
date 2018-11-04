@@ -1,8 +1,9 @@
 import IBMWatson as ibmw
 
 def responseType():
-    return ibmw.response_to_df(ibmw.get_tone("I'm so happy!"))
+    return ibmw.response_to_df(ibmw.get_tone("I'm so happy! I'm not happy"))
 
-print(responseType())
+x = responseType()
 #Check if sadness
-df.groupby('tone_id')['score'].count()/(df['sentence_id'].values[-1] + 1)
+#Average
+print(x.groupby('tone_id')['score'].count()/(x['sentence_id'].values[-1] + 1))

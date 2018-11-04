@@ -28,12 +28,18 @@ async def on_message(message):
 
 	if(message.attachments):
 		print("attached url: ", message.attachments[0]['url'])
-		print("predictions: ", Clarifai.predict_image(message.attachments[0]['url'])['outputs'][0])
-		await client.send_message(message.channel, Clarifai.predict_image(message.attachments[0]['url'])['outputs'][0])
+		x = Clarifai.predict_image(message.attachments[0]['url'])
+		predictions = [y['name'] for y in x['outputs'][0]['data']['concepts']]
+		print("predictions: ", " ".join(predictions))
+		await client.send_message(message.channel, predictions)
+		# await client.send_message(message.channel, ibmw.get_document_tones(ibmw.get_tone(".".join(predictions))))
 	if(message.embeds):
 		print("embedded url: ", message.embeds[0]['url'])
-		print("predictions: ", Clarifai.predict_image(message.embeds[0]['url'])['outputs'][0])
-		await client.send_message(message.channel, Clarifai.predict_image(message.embeds[0]['url'])['outputs'][0])
+		x = Clarifai.predict_image(message.embeds[0]['url'])
+		predictions = [y['name'] for y in x['outputs'][0]['data']['concepts']]
+		print("predictions: ", " ".join(predictions))
+		await client.send_message(message.channel, predictions)
+		# await client.send_message(message.channel, ibmw.get_document_tones(ibmw.get_tone(".".join(predictions))))
 
 	await client.send_message(message.channel, ibmw.auto_response(message.content))
 

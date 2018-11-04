@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # watson assistant auto response
 service = watson_developer_cloud.AssistantV1(
     iam_apikey = '6y2WMureuqOLcCVK6vifyE0lFeq_Z2UXyeqHlr3PMWxq', # replace with API key
-    version = '2018-09-20', 
+    version = '2018-09-20',
     url = 'https://gateway-wdc.watsonplatform.net/assistant/api'
 )
 workspace_id = 'f3155ca1-68d7-48f5-874d-fb7ecb03ff80' # replace with workspace ID
@@ -23,7 +23,7 @@ def auto_response(text):
             'text': text
         }
     )
-    if response.result['output']['generic'][0]['text']:
+    if response.result['output']['generic'] and response.result['output']['generic'][0]['text']:
         # print(response.result['output'])
         return response.result['output']['generic'][0]['text']
     else:

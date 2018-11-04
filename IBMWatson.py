@@ -23,8 +23,11 @@ def auto_response(text):
             'text': text
         }
     )
-    if response:
+    if response.result['output']['generic'][0]['text']:
+        # print(response.result['output'])
         return response.result['output']['generic'][0]['text']
+    else:
+        return None
 
 ##############
 

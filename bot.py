@@ -1,6 +1,7 @@
 import discord
 import IBMWatson as ibmw
 import ImageSearch
+import Clarifai
 
 client = discord.Client()
 
@@ -24,8 +25,18 @@ async def on_ready():
 async def on_message(message):
 	if message.author == client.user:
 		return
+
+	if(message.attachments):
+		print("attached url: ", message.attachments[0]['url'])
+		print("predictions: ", Clarifai.predict_image(message.attachments[0]['url'])['outputs'][0])
+		await client.send_message(message.channel, Clarifai.predict_image(message.attachments[0]['url'])['outputs'][0])
+	if(message.embeds):
+		print("embedded url: ", message.embeds[0]['url'])
+		print("predictions: ", Clarifai.predict_image(message.embeds[0]['url'])['outputs'][0])
+		await client.send_message(message.channel, Clarifai.predict_image(message.embeds[0]['url'])['outputs'][0])
+
 	await client.send_message(message.channel, ibmw.auto_response(message.content))
-	
+
 	if is_sad(message.content):
 		e = discord.Embed(description='cheer up!')
 		e.set_image(url=ImageSearch.search_image_get_url('cute animal'))
